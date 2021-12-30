@@ -1,17 +1,24 @@
-
-import GLPK from 'glpk.js';
+import type { LP, Result } from 'glpk.js';
 import { Stack } from "./Stack";
 
 type Node<T> = { value: T, parent: Node<T> | null }
-type BBNode = Node<{ lp: GLPK.LP, solution?: GLPK.Result, label?: string }>;
+type BBNode = Node<{ lp: LP, solution?: Result, label?: string }>;
+type Init = {
+  solve: (lp: LP) => Promise<Result>,
+  constants: {
+    GLP_LO: number,
+    GLP_UP: number
+    GLP_INFEAS: number,
+  }
+}
 
-export const init = (glpk: GLPK.GLPK) => {
+export const init = ({ solve, constants: { GLP_LO, GLP_UP, GLP_INFEAS } }: Init) => {
   const Branch = (mainNode: BBNode, leftName: string, rightName: string, [name, value]: [string, number]): [BBNode, BBNode] => {
     const leftVarBound = Math.floor(value);
     const rightVarBound = Math.ceil(value);
     const leftLabel = `${name}<=${leftVarBound}`;
     const rightLabel = `${name}>=${rightVarBound}`;
-    const left: GLPK.LP = {
+    const left: LP = {
       ...mainNode.value.lp,
       name: leftName,
       subjectTo: [
@@ -21,11 +28,11 @@ export const init = (glpk: GLPK.GLPK) => {
           vars: [
             { name, coef: 1.0 },
           ],
-          bnds: { type: glpk.GLP_UP, ub: leftVarBound, lb: 0.0 }
+          bnds: { type: GLP_UP, ub: leftVarBound, lb: 0.0 }
         }
       ]
     };
-    const right: GLPK.LP = {
+    const right: LP = {
       ...mainNode.value.lp,
       name: rightName,
       subjectTo: [
@@ -35,7 +42,7 @@ export const init = (glpk: GLPK.GLPK) => {
           vars: [
             { name, coef: 1.0 },
           ],
-          bnds: { type: glpk.GLP_LO, ub: 0.0, lb: rightVarBound }
+          bnds: { type: GLP_LO, ub: 0.0, lb: rightVarBound }
         }
       ]
     };
@@ -51,27 +58,23 @@ export const init = (glpk: GLPK.GLPK) => {
     return { next: () => String(i++) }
   }
 
-  const BranchAndBound = (initial: GLPK.LP): {
-    glpkRes: GLPK.Result | null,
+  const BranchAndBound = async (initial: LP): Promise<{
+    glpkRes: Result | null,
     nodes: BBNode[]
-  } => {
+  }> => {
     const stack = Stack<BBNode>();
     const idGenerator = IdGenerator();
     const nodes: BBNode[] = [];
-    let zsol: GLPK.Result | null = null;
+    let zsol: Result | null = null;
 
     stack.push({ value: { lp: initial }, parent: null });
 
     while(!stack.empty()) {
       const currentNode = stack.popOrThrow();
-      const sol = glpk.solve(currentNode.value.lp, {
-        msglev: glpk.GLP_MSG_OFF,
-        presol: true,
-      });
+      const sol = await solve(currentNode.value.lp);
       currentNode.value.solution = sol;
-      console.log(sol.result);
 
-      if(sol.result.status === glpk.GLP_INFEAS) {
+      if(sol.result.status === GLP_INFEAS) {
         continue
       }
       if(zsol !== null && zsol.result.z > sol.result.z) {
