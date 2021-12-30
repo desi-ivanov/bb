@@ -1,8 +1,7 @@
 import GLPK from 'glpk.js';
-import { glpk } from "./glpk";
 
 
-export const Knapsack = (items: { weight: number, value: number }[], capacity: number): GLPK.LP => {
+export const Knapsack = (glpk: GLPK.GLPK, items: { weight: number, value: number }[], capacity: number): GLPK.LP => {
   return {
     name: 'Knapsack',
     objective: {

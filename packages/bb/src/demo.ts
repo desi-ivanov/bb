@@ -1,9 +1,11 @@
 
-import { BranchAndBound } from "./BranchAndBound";
-import { glpk } from "./glpk";
+import { init } from "./BranchAndBound";
 import { Knapsack } from "./Knapsack";
+import GLPK from 'glpk.js';
+const mkglpk = (): GLPK.GLPK => (GLPK as () => GLPK.GLPK)();
+export const glpk = mkglpk();
 
-const p = Knapsack([
+const p = Knapsack(glpk, [
   { weight: 4, value: 4 },
 
   { weight: 6, value: 6 },
@@ -12,6 +14,8 @@ const p = Knapsack([
 
   { weight: 5, value: 5 },
 ], 10)
+
+const { BranchAndBound } = init(glpk);
 
 console.log(BranchAndBound(p));
 
