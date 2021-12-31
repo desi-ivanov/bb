@@ -1,5 +1,5 @@
 export const Legend = {
-  "currentBestSolution": "#080",
-  "currentNode": "#f00",
-  "visitedNode": "#000",
+  current_best_solution: "#080",
+  current_node: "#f00",
+  visited_node: "#000",
 }

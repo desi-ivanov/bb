@@ -14,6 +14,7 @@ const useGlpkTranslator =
 
 export const NodeInfo: React.FC<{ node: BBNode }> = memo(
   ({ node }) => {
+    const glpkTranslator = useGlpkTranslator();
     return (
       <Stack spacing={1}>
         <Stack spacing={0.5}>
@@ -41,13 +42,24 @@ export const NodeInfo: React.FC<{ node: BBNode }> = memo(
           </Stack>
         )}
 
-        < Stack spacing={0.5}>
-          <ObjectiveFunction objective={node.value.lp.objective} />
-          {node.value.lp.subjectTo.map((c) => (
-            <div key={c.name} style={{ paddingLeft: 20 }}>
-              <Constraint constraint={c} />
-            </div>
-          ))}
+        <Stack spacing={1} style={{ flexDirection: "row" }} >
+          <Stack spacing={0.25}>
+            <Stack spacing={0.25} style={{ flexDirection: "row" }}>
+              <strong>{glpkTranslator("obj-direction", node.value.lp.objective.direction)}</strong>
+              <span>z</span>
+            </Stack>
+            <span><strong>sub. to</strong></span>
+          </Stack>
+          <Stack spacing={0.5}>
+            <Stack spacing={0.25} style={{ flexDirection: "row" }}>
+              {node.value.lp.objective.vars.map((v) => (
+                <Variable key={v.name} variable={v} />
+              ))}
+            </Stack>
+            {node.value.lp.subjectTo.map((c) => (
+              <Constraint key={c.name} constraint={c} />
+            ))}
+          </Stack>
         </Stack>
       </Stack >
     );
@@ -57,23 +69,6 @@ export const NodeInfo: React.FC<{ node: BBNode }> = memo(
 const toFixedWrp = (value: number, precision: number): string => {
   return Number.isInteger(value) ? String(value) : value.toFixed(precision);
 };
-
-
-const ObjectiveFunction: React.FC<{ objective: LP["objective"] }> = memo(
-  ({ objective }) => {
-    const glpkTranslator = useGlpkTranslator();
-    return (
-      <Stack style={{ flexDirection: "row" }} spacing={0.25}>
-        <strong>{glpkTranslator("obj-direction", objective.direction)}</strong>
-        <span>z</span>
-        <span>=</span>
-        {objective.vars.map((v) => (
-          <Variable key={v.name} variable={v} />
-        ))}
-      </Stack>
-    );
-  }
-);
 
 const Variable: React.FC<{ variable: LP["objective"]["vars"][0] }> = memo(
   ({ variable }) => {

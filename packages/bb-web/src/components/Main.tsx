@@ -56,7 +56,7 @@ export const Main: React.FC = () => {
                   style={{ flexDirection: "row", alignItems: "center" }}
                   spacing={0.5}
                 >
-                  <div style={{ width: 20, height: 20, backgroundColor: v }} />{" "}
+                  <div style={{ width: 20, height: 20, backgroundColor: v }} />
                   <span>{k}</span>
                 </Stack>
               ))}
@@ -65,7 +65,6 @@ export const Main: React.FC = () => {
           <div style={{ backgroundColor: "#eee", padding: 10 }}>
             <SolutionsExplorer />
           </div>
-
         </Stack>
       </div>
       <div

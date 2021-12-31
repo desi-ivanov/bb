@@ -10,7 +10,8 @@ export const RenderPrecomputedNode: React.FC<{
 }> = ({ node, parentX, parentY }) => {
   const currentNode = useCurrentNode();
   const isVisited = useIsVisited(node.value.bbNode);
-  const isBest = currentNode?.value.zStarSnapshot?.name === node.value.bbNode.value.lp.name;
+  const isBest =
+    currentNode?.value.zStarSnapshot?.name === node.value.bbNode.value.lp.name;
   return !isVisited ? (
     <></>
   ) : (
@@ -53,14 +54,21 @@ export const RenderPrecomputedNode: React.FC<{
               node={child}
             />
           ))}
-      <g><circle
-        cx={node.value.x}
-        cy={node.value.y}
-        r={20}
-        fill={
-          Legend[isBest ? "currentBestSolution" : currentNode === node.value.bbNode ? "currentNode" : "visitedNode"]
-        }
-      />
+      <g>
+        <circle
+          cx={node.value.x}
+          cy={node.value.y}
+          r={20}
+          fill={
+            Legend[
+              isBest
+                ? "current_best_solution"
+                : currentNode === node.value.bbNode
+                ? "current_node"
+                : "visited_node"
+            ]
+          }
+        />
         <text
           x={node.value.x}
           y={node.value.y}
