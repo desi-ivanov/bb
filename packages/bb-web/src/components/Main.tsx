@@ -31,9 +31,9 @@ export const Main: React.FC = () => {
         overflow: "hidden",
       }}
     >
-      <div style={{ padding: 20 }}>
-        <Stack spacing={2}>
-          <Stack spacing={1} style={{ backgroundColor: "#eee", padding: 10 }}>
+      <div style={{ padding: 16 }}>
+        <Stack spacing={1}>
+          <Stack spacing={1} style={{ backgroundColor: "#eee", padding: 16 }}>
             <div><strong>Problem</strong></div>
             <div>
               <textarea
@@ -47,7 +47,7 @@ export const Main: React.FC = () => {
             </div>
             {error && <div style={{ color: "red" }}>{String(error)}</div>}
           </Stack>
-          <div style={{ backgroundColor: "#eee", padding: 10 }}>
+          <div style={{ backgroundColor: "#eee", padding: 16 }}>
             <Stack spacing={1}>
               <strong>Legend</strong>
               {Object.entries(Legend).map(([k, v]) => (
@@ -62,7 +62,7 @@ export const Main: React.FC = () => {
               ))}
             </Stack>
           </div>
-          <div style={{ backgroundColor: "#eee", padding: 10 }}>
+          <div style={{ backgroundColor: "#eee", padding: 16 }}>
             <SolutionsExplorer />
           </div>
         </Stack>
