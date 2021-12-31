@@ -1,19 +1,31 @@
-import type { LP, Result } from 'glpk.js';
+import type { LP, Result } from "glpk.js";
 import { Stack } from "./Stack";
 
-type Node<T> = { value: T, parent: Node<T> | null }
-type BBNode = Node<{ lp: LP, solution?: Result, label?: string }>;
-type Init = {
-  solve: (lp: LP) => Promise<Result>,
+export type Node<T> = { value: T; left?: Node<T>; right?: Node<T> };
+export type BBNode = Node<{ lp: LP; solution?: Result; label?: string, status?: "z-solution" | "r-solution" | "bound" | "unfeasible" }>;
+export type BBInit = {
+  solve: (lp: LP) => Promise<Result>;
   constants: {
-    GLP_LO: number,
-    GLP_UP: number
-    GLP_INFEAS: number,
-  }
-}
+    GLP_LO: number;
+    GLP_UP: number;
+    GLP_INFEAS: number;
+  };
+};
+export type BBSolution = {
+  glpkRes: Result | null;
+  root: BBNode;
+};
 
-export const init = ({ solve, constants: { GLP_LO, GLP_UP, GLP_INFEAS } }: Init) => {
-  const Branch = (mainNode: BBNode, leftName: string, rightName: string, [name, value]: [string, number]): [BBNode, BBNode] => {
+export const init = ({
+  solve,
+  constants: { GLP_LO, GLP_UP, GLP_INFEAS },
+}: BBInit) => {
+  const Branch = (
+    mainNode: BBNode,
+    leftName: string,
+    rightName: string,
+    [name, value]: [string, number]
+  ): [BBNode, BBNode] => {
     const leftVarBound = Math.floor(value);
     const rightVarBound = Math.ceil(value);
     const leftLabel = `${name}<=${leftVarBound}`;
@@ -25,12 +37,10 @@ export const init = ({ solve, constants: { GLP_LO, GLP_UP, GLP_INFEAS } }: Init)
         ...mainNode.value.lp.subjectTo,
         {
           name: leftLabel,
-          vars: [
-            { name, coef: 1.0 },
-          ],
-          bnds: { type: GLP_UP, ub: leftVarBound, lb: 0.0 }
-        }
-      ]
+          vars: [{ name, coef: 1.0 }],
+          bnds: { type: GLP_UP, ub: leftVarBound, lb: 0.0 },
+        },
+      ],
     };
     const right: LP = {
       ...mainNode.value.lp,
@@ -39,35 +49,30 @@ export const init = ({ solve, constants: { GLP_LO, GLP_UP, GLP_INFEAS } }: Init)
         ...mainNode.value.lp.subjectTo,
         {
           name: rightLabel,
-          vars: [
-            { name, coef: 1.0 },
-          ],
-          bnds: { type: GLP_LO, ub: 0.0, lb: rightVarBound }
-        }
-      ]
+          vars: [{ name, coef: 1.0 }],
+          bnds: { type: GLP_LO, ub: 0.0, lb: rightVarBound },
+        },
+      ],
     };
     return [
-      { value: { lp: left, label: leftLabel }, parent: mainNode },
-      { value: { lp: right, label: rightLabel }, parent: mainNode }
+      { value: { lp: left, label: leftLabel } },
+      { value: { lp: right, label: rightLabel } },
     ];
-  }
-
+  };
 
   const IdGenerator = () => {
     let i = 0;
-    return { next: () => String(i++) }
-  }
+    return { next: () => String(i++) };
+  };
 
-  const BranchAndBound = async (initial: LP): Promise<{
-    glpkRes: Result | null,
-    nodes: BBNode[]
-  }> => {
+  const BranchAndBound = async (initial: LP): Promise<BBSolution> => {
     const stack = Stack<BBNode>();
     const idGenerator = IdGenerator();
-    const nodes: BBNode[] = [];
-    let zsol: Result | null = null;
-
-    stack.push({ value: { lp: initial }, parent: null });
+    let zStar: Result | null = null;
+    const root: BBNode = {
+      value: { lp: { ...initial, name: idGenerator.next() } },
+    };
+    stack.push(root);
 
     while(!stack.empty()) {
       const currentNode = stack.popOrThrow();
@@ -75,35 +80,45 @@ export const init = ({ solve, constants: { GLP_LO, GLP_UP, GLP_INFEAS } }: Init)
       currentNode.value.solution = sol;
 
       if(sol.result.status === GLP_INFEAS) {
-        continue
+        currentNode.value.status = "unfeasible";
+        continue;
       }
-      if(zsol !== null && zsol.result.z > sol.result.z) {
+      if(zStar !== null && zStar.result.z > sol.result.z) {
+        currentNode.value.status = "bound";
         // upperbound
-        continue
-      }
-
-      const fractionalVar = Object.entries(sol.result.vars).find(([_, v]) => !Number.isInteger(v));
-
-      if(fractionalVar === undefined) {
-        if(zsol === null || sol.result.z > zsol.result.z) {
-          // new optimal solution
-          zsol = sol;
-        }
         continue;
       }
 
-      const [p1, p2] = Branch(currentNode, idGenerator.next(), idGenerator.next(), fractionalVar);
+      const fractionalVar = Object.entries(sol.result.vars).find(
+        ([_, v]) => !Number.isInteger(v)
+      );
+
+      if(fractionalVar === undefined) {
+        currentNode.value.status = "z-solution"
+        if(zStar === null || sol.result.z > zStar.result.z) {
+          // new optimal solution
+          zStar = sol;
+        }
+        continue;
+      }
+      currentNode.value.status = "r-solution"
+
+      const [p1, p2] = Branch(
+        currentNode,
+        idGenerator.next(),
+        idGenerator.next(),
+        fractionalVar
+      );
 
       stack.push(p1);
       stack.push(p2);
-
-      nodes.push(p1);
-      nodes.push(p2);
+      currentNode.left = p1;
+      currentNode.right = p2;
     }
     return {
-      glpkRes: zsol,
-      nodes,
+      glpkRes: zStar,
+      root,
     };
-  }
-  return { BranchAndBound }
-}
+  };
+  return { BranchAndBound };
+};
