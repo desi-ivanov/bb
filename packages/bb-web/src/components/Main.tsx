@@ -1,6 +1,6 @@
 import React, { useCallback, useRef, useState } from "react";
 import { BBSolution, } from "bb/dist/BranchAndBound";
-import { solveRaw } from "../solver";
+import { solveRaw } from "./utils";
 import { Playground } from "./Playground";
 
 const initialProblem = `max z = 2x1 + x2

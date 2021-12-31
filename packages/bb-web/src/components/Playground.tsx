@@ -53,7 +53,7 @@ export const Playground: React.FC<{ solution: BBSolution }> = ({ solution }) => 
   return (
     <div
       ref={rootDivRef}
-      style={{ overflow: "scroll scroll", flex: 1, backgroundColor: "#ccc" }}
+      style={{ overflow: "scroll scroll", flex: 1, backgroundColor: "#e3e3e3" }}
       onMouseDown={handleMouseDown}
       onMouseUp={handleMouseUp}
       onMouseMove={handleMouseMove}

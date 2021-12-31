@@ -23,27 +23,30 @@ export const RenderPrecomputedNode: React.FC<{ node: PrecomputedNode }> = ({
               y1={node.value.y}
               x2={child.value.x}
               y2={child.value.y}
-              stroke="black"
+              stroke="#444"
+              strokeWidth={0.5}
             />
             <text
               x={child.value.x + (node.value.x - child.value.x) / 2}
               y={child.value.y + (node.value.y - child.value.y) / 2}
               textAnchor="middle"
-              fill="green"
               fontWeight={700}
+
             >
               {child.value.bbNode.value.label}
             </text>
             <RenderPrecomputedNode node={child} />
           </React.Fragment>
         ))}
-      <circle cx={node.value.x} cy={node.value.y} r={20} fill="red" />
+      <circle cx={node.value.x} cy={node.value.y} r={20} stroke="#000"/>
       <text
         x={node.value.x}
         y={node.value.y}
         textAnchor="middle"
         alignmentBaseline="middle"
+        fontWeight={800}
         fill="#fff"
+
       >
         {node.value.bbNode.value.lp.name}
       </text>
