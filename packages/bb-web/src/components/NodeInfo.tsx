@@ -30,16 +30,18 @@ export const NodeInfo: React.FC<{ node: BBNode }> = memo(
               : <span>None</span>}
           </div>
         </Stack>
-        <Stack spacing={0.5}>
-          <div>z: {node.value.solution?.result.z}</div>
-          {Object.entries(node.value.solution?.result.vars ?? {}).map(
-            ([k, v]) => (
-              <div key={k}>{`${k}: ${v}`}</div>
-            )
-          )}
-        </Stack>
+        {node.value.solution && (
+          <Stack spacing={0.5}>
+            <div><strong>z</strong> = {toFixedWrp(node.value.solution.result.z, 2)}</div>
+            {Object.entries(node.value.solution.result.vars).map(
+              ([k, v]) => (
+                <div key={k}><strong>{k}</strong> = {toFixedWrp(v, 2)}</div>
+              )
+            )}
+          </Stack>
+        )}
 
-        <Stack spacing={0.5}>
+        < Stack spacing={0.5}>
           <ObjectiveFunction objective={node.value.lp.objective} />
           {node.value.lp.subjectTo.map((c) => (
             <div key={c.name} style={{ paddingLeft: 20 }}>
@@ -47,10 +49,15 @@ export const NodeInfo: React.FC<{ node: BBNode }> = memo(
             </div>
           ))}
         </Stack>
-      </Stack>
+      </Stack >
     );
   }
 );
+
+const toFixedWrp = (value: number, precision: number): string => {
+  return Number.isInteger(value) ? String(value) : value.toFixed(precision);
+};
+
 
 const ObjectiveFunction: React.FC<{ objective: LP["objective"] }> = memo(
   ({ objective }) => {
