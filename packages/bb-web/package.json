@@ -21,7 +21,7 @@
   "license": "GLP-3.0",
   "scripts": {
     "start": "react-scripts start",
-    "build": "cd ../../ && yarn && yarn bootstrap && cd ./packages/bb-web/ react-scripts build",
+    "build": "cd ../../ && yarn && yarn bootstrap && cd ./packages/bb-web/ && react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
