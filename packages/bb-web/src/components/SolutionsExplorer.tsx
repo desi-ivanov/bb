@@ -1,7 +1,7 @@
 import React from "react";
 import { useSelector } from "../hooks/useSelector";
 import { PlaygroundContext, useCurrentNode } from "./PlaygroundProvider";
-import { SolutionInfo } from "./SolutionInfo";
+import { NodeInfo } from "./NodeInfo";
 import { Stack } from "./Stack";
 
 export const SolutionsExplorer: React.FC = () => {
@@ -16,7 +16,7 @@ export const SolutionsExplorer: React.FC = () => {
           <button onClick={prevNode}>Prev node</button>
           <button onClick={nextNode}>Next node</button>
         </Stack>
-        <SolutionInfo solution={currentNode} />
+        <NodeInfo node={currentNode} />
       </Stack>
     )
   );

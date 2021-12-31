@@ -12,39 +12,36 @@ const useGlpkTranslator =
       return value === 3 ? "<=" : value === 2 ? ">=" : "=";
     };
 
-export const SolutionInfo: React.FC<{ solution: BBNode }> = memo(
-  ({ solution }) => {
+export const NodeInfo: React.FC<{ node: BBNode }> = memo(
+  ({ node }) => {
     return (
       <Stack spacing={1}>
         <Stack spacing={0.5}>
           <div>
-            <strong>Node</strong>: {solution.value.lp.name}
+            <strong>Node</strong>: {node.value.lp.name}
           </div>
           <div>
-            <strong>Status</strong>: {solution.value.status} ({solution.value['solution']?.result.status})
+            <strong>Status</strong>: {node.value.status} ({node.value.solution?.result.status})
           </div>
           <div>
-            <strong>BestZ</strong>: {solution.value.zStarSnapshot ?
-              <span>{solution.value.zStarSnapshot?.result.z}{" "}
-                (Node #{solution.value.zStarSnapshot?.name})</span>
+            <strong>BestZ</strong>: {node.value.zStarSnapshot ?
+              <span>{node.value.zStarSnapshot?.result.z}{" "}
+                (Node #{node.value.zStarSnapshot?.name})</span>
               : <span>None</span>}
           </div>
         </Stack>
         <Stack spacing={0.5}>
-          <div>z: {solution.value.solution?.result.z}</div>
-          <div>
-            Varibles:{" "}
-            {Object.entries(solution.value.solution?.result.vars ?? {}).map(
-              ([k, v]) => (
-                <div key={k}>{`   ${k}: ${v}`}</div>
-              )
-            )}
-          </div>
+          <div>z: {node.value.solution?.result.z}</div>
+          {Object.entries(node.value.solution?.result.vars ?? {}).map(
+            ([k, v]) => (
+              <div key={k}>{`${k}: ${v}`}</div>
+            )
+          )}
         </Stack>
 
         <Stack spacing={0.5}>
-          <ObjectiveFunction objective={solution.value.lp.objective} />
-          {solution.value.lp.subjectTo.map((c) => (
+          <ObjectiveFunction objective={node.value.lp.objective} />
+          {node.value.lp.subjectTo.map((c) => (
             <div key={c.name} style={{ paddingLeft: 20 }}>
               <Constraint constraint={c} />
             </div>
