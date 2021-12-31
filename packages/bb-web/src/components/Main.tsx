@@ -31,7 +31,7 @@ export const Main: React.FC = () => {
         overflow: "hidden",
       }}
     >
-      <div style={{ padding: 16 }}>
+      <div style={{ padding: 16, overflow: "auto" }}>
         <Stack spacing={1}>
           <Stack spacing={1} style={{ backgroundColor: "#eee", padding: 16 }}>
             <div><strong>Problem</strong></div>
