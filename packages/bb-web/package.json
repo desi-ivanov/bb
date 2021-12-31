@@ -21,7 +21,7 @@
   "license": "GLP-3.0",
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "build": "cd ../../ && yarn && yarn bootstrap && react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
