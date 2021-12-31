@@ -10,7 +10,7 @@ export const SolutionsExplorer: React.FC = () => {
   const nextNode = useSelector(PlaygroundContext, x => x.nextNode);
   return (
     currentNode && (
-      <Stack spacing={1} style={{ backgroundColor: "#eee", padding: 10 }}>
+      <Stack spacing={1}>
         <strong>Solution explorer</strong>
         <Stack style={{ flexDirection: "row", }} spacing={1}>
           <button onClick={prevNode}>Prev node</button>

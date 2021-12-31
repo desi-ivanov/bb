@@ -55,7 +55,7 @@ export const Playground: React.FC<{ root: PrecomputedNode }> = React.memo(
         onMouseLeave={handleMouseUp}
       >
         <svg
-          viewBox="-100 -400 10000 10000"
+          viewBox="-50 -50 10000 10000"
           width={10000}
           height={10000}
           style={{position: "relative"}}

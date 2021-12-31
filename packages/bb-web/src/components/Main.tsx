@@ -1,5 +1,6 @@
 import React, { useCallback, useRef, useState } from "react";
 import { useSelector } from "../hooks/useSelector";
+import { Legend } from "./Legend";
 import { Playground } from "./Playground";
 import { PlaygroundContext } from "./PlaygroundProvider";
 import { SolutionsExplorer } from "./SolutionsExplorer";
@@ -33,7 +34,7 @@ export const Main: React.FC = () => {
       <div style={{ padding: 20 }}>
         <Stack spacing={2}>
           <Stack spacing={1} style={{ backgroundColor: "#eee", padding: 10 }}>
-            <div>Problem:</div>
+            <div><strong>Problem</strong></div>
             <div>
               <textarea
                 style={{ width: 300, height: 200 }}
@@ -46,7 +47,25 @@ export const Main: React.FC = () => {
             </div>
             {error && <div style={{ color: "red" }}>{String(error)}</div>}
           </Stack>
-          <SolutionsExplorer />
+          <div style={{ backgroundColor: "#eee", padding: 10 }}>
+            <Stack spacing={1}>
+              <strong>Legend</strong>
+              {Object.entries(Legend).map(([k, v]) => (
+                <Stack
+                  key={k}
+                  style={{ flexDirection: "row", alignItems: "center" }}
+                  spacing={0.5}
+                >
+                  <div style={{ width: 20, height: 20, backgroundColor: v }} />{" "}
+                  <span>{k}</span>
+                </Stack>
+              ))}
+            </Stack>
+          </div>
+          <div style={{ backgroundColor: "#eee", padding: 10 }}>
+            <SolutionsExplorer />
+          </div>
+
         </Stack>
       </div>
       <div
@@ -55,8 +74,7 @@ export const Main: React.FC = () => {
           display: "flex",
           flexDirection: "column",
           overflow: "hidden",
-          backgroundColor: "#e3e3e3",
-
+          backgroundColor: "#eee",
         }}
       >
         {root && <Playground root={root} />}
