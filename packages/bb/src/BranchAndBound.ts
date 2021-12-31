@@ -93,7 +93,7 @@ export const init = ({
         continue;
       }
 
-      if(zStar !== null && zStar.result.z >= sol.result.z) {
+      if(zStar !== null && zStar.result.z >= Math.floor(sol.result.z)) {
         currentNode.value.status = "bound";
         // upperbound
         continue;
