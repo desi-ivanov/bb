@@ -25,7 +25,7 @@ export const NodeInfo: React.FC<{ node: BBNode }> = memo(
             <strong>Status</strong>: {node.value.status} ({node.value.solution?.result.status})
           </div>
           <div>
-            <strong>BestZ</strong>: {node.value.zStarSnapshot ?
+            <strong>Best Int z</strong>: {node.value.zStarSnapshot ?
               <span>{node.value.zStarSnapshot?.result.z}{" "}
                 (Node #{node.value.zStarSnapshot?.name})</span>
               : <span>None</span>}
@@ -33,7 +33,7 @@ export const NodeInfo: React.FC<{ node: BBNode }> = memo(
         </Stack>
         {node.value.solution && (
           <Stack spacing={0.5}>
-            <div><strong>z</strong> = {toFixedWrp(node.value.solution.result.z, 2)}</div>
+            <div><strong>z</strong> = {toFixedWrp(node.value.solution.result.z, 6)}</div>
             {Object.entries(node.value.solution.result.vars).map(
               ([k, v]) => (
                 <div key={k}><strong>{k}</strong> = {toFixedWrp(v, 2)}</div>
