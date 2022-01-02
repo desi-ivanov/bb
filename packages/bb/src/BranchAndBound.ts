@@ -104,12 +104,9 @@ export const init = ({
       );
 
       if(fractionalVar === undefined) {
+        zStar = sol;
         currentNode.value.status = "z-solution"
-        if(zStar === null || sol.result.z > zStar.result.z) {
-          // new optimal solution
-          zStar = sol;
-          currentNode.value.zStarSnapshot = sol;
-        }
+        currentNode.value.zStarSnapshot = sol;
         continue;
       }
       currentNode.value.status = "r-solution"
