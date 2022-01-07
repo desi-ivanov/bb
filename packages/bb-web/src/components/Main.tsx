@@ -1,5 +1,5 @@
+import { useContextSelector } from "@fluentui/react-context-selector";
 import React, { useCallback, useRef, useState } from "react";
-import { useSelector } from "../hooks/useSelector";
 import { Legend } from "./Legend";
 import { NodeInfo } from "./NodeInfo";
 import { Playground } from "./Playground";
@@ -14,9 +14,9 @@ const initialProblem = `max z = x1 + 6x2
 export const Main: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const rawProb = useRef(initialProblem);
-  const root = useSelector(PlaygroundContext, (x) => x.root);
-  const selectedNode = useSelector(PlaygroundContext, (x) => x.selectedNode);
-  const setSolution = useSelector(PlaygroundContext, (x) => x.setSolution);
+  const root = useContextSelector(PlaygroundContext, (x) => x.root);
+  const selectedNode = useContextSelector(PlaygroundContext, (x) => x.selectedNode);
+  const setSolution = useContextSelector(PlaygroundContext, (x) => x.setSolution);
 
   const handleSolve = useCallback(() => {
     setError(null);

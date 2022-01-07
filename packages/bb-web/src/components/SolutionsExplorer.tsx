@@ -1,13 +1,13 @@
 import React from "react";
-import { useSelector } from "../hooks/useSelector";
 import { PlaygroundContext, useCurrentNode } from "./PlaygroundProvider";
 import { NodeInfo } from "./NodeInfo";
 import { Stack } from "./Stack";
+import { useContextSelector } from "@fluentui/react-context-selector";
 
 export const SolutionsExplorer: React.FC = () => {
   const currentNode = useCurrentNode();
-  const prevNode = useSelector(PlaygroundContext, x => x.prevNode);
-  const nextNode = useSelector(PlaygroundContext, x => x.nextNode);
+  const prevNode = useContextSelector(PlaygroundContext, x => x.prevNode);
+  const nextNode = useContextSelector(PlaygroundContext, x => x.nextNode);
   return (
     currentNode && (
       <Stack spacing={1}>

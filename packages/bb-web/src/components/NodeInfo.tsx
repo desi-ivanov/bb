@@ -1,4 +1,4 @@
-import type { BBNode } from "bb/dist/BranchAndBound";
+import type { BBNode } from "@bb/core/dist/BranchAndBound";
 import { LP } from "glpk.js";
 import React, { memo } from "react";
 import { Stack } from "./Stack";

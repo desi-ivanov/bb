@@ -1,8 +1,10 @@
 {
-  "name": "bb-web",
+  "name": "@bb/bb-web",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@bb/core": "1.0.0",
+    "@fluentui/react-context-selector": "^9.0.0-beta.4",
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^12.0.0",
     "@testing-library/user-event": "^13.2.1",
@@ -10,7 +12,6 @@
     "@types/node": "^16.7.13",
     "@types/react": "^17.0.20",
     "@types/react-dom": "^17.0.9",
-    "bb": "../bb",
     "glpk.js": "^4.0.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
@@ -21,7 +22,7 @@
   "license": "GLP-3.0",
   "scripts": {
     "start": "react-scripts start",
-    "build": "cd ../../ && yarn && yarn bootstrap && cd ./packages/bb-web/ && react-scripts build",
+    "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },

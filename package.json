@@ -1,14 +1,10 @@
 {
   "name": "root",
   "private": true,
-  "scripts": {
-    "build": "lerna run build --stream",
-    "bootstrap": "lerna bootstrap"
-  },
-  "devDependencies": {
-    "lerna": "^4.0.0"
-  },
   "dependencies": {
     "glpk.js": "^4.0.1"
-  }
+  },
+  "workspaces": [
+    "packages/*"
+  ]
 }

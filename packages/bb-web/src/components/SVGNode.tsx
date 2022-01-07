@@ -1,6 +1,6 @@
-import { BBNode } from "bb/dist/BranchAndBound";
+import { BBNode } from "@bb/core/dist/BranchAndBound";
+import { useContextSelector } from "@fluentui/react-context-selector";
 import React from "react";
-import { useSelector } from "../hooks/useSelector";
 import { Legend } from "./Legend";
 import { PlaygroundContext, useCurrentNode, useIsVisited } from "./PlaygroundProvider";
 
@@ -25,8 +25,8 @@ export const SVGNode: React.FC<{
 }) => {
     const currentNode = useCurrentNode();
     const isVisited = useIsVisited(node);
-    const selectNode = useSelector(PlaygroundContext, s => s.selectNode);
-    const isSelected = useSelector(PlaygroundContext, s => s.selectedNode === node);
+    const selectNode = useContextSelector(PlaygroundContext, s => s.selectNode);
+    const isSelected = useContextSelector(PlaygroundContext, s => s.selectedNode === node);
     const isBest = currentNode?.value.zStarSnapshot?.name === node.value.lp.name;
     const x = startX + dedicatedWidth / 2;
     const y = startY;

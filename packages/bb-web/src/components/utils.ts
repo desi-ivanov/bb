@@ -1,7 +1,7 @@
 
-import { init, parse, toGlpk } from "bb";
+import { init, parse, toGlpk } from "@bb/core";
 import type { GLPK, LP } from "glpk.js";
-import { BBSolution, BBNode } from "bb/dist/BranchAndBound";
+import { BBSolution, BBNode } from "@bb/core/dist/BranchAndBound";
 
 export const solveLP = (lp: (glpk: GLPK) => LP) =>
   import("glpk.js")

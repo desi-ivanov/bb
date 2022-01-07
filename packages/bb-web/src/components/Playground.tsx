@@ -1,4 +1,4 @@
-import { BBNode } from "bb/dist/BranchAndBound";
+import { BBNode } from "@bb/core/dist/BranchAndBound";
 import React, { useCallback, useRef, useState } from "react";
 import { SVGNode } from "./SVGNode";
 import { depth } from "./utils";

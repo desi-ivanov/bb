@@ -1,7 +1,6 @@
-import { BBNode, BBSolution } from "bb/dist/BranchAndBound";
+import { BBNode, BBSolution } from "@bb/core/dist/BranchAndBound";
 import React, { useCallback, useRef, useState } from "react";
-import { useSelector } from "../hooks/useSelector";
-
+import { createContext, useContextSelector } from "@fluentui/react-context-selector";
 export type PlaygroundType = {
   root: BBNode | null;
   currentNode: BBNode | null;
@@ -16,7 +15,7 @@ export type PlaygroundType = {
   selectNode: (node: BBNode | null) => void;
 };
 
-export const PlaygroundContext = React.createContext<PlaygroundType>({
+export const PlaygroundContext = createContext<PlaygroundType>({
   setSolution: () => { },
   solution: null,
   root: null,
@@ -106,11 +105,11 @@ export const PlaygroundProvider: React.FC = ({ children }) => {
 };
 
 export const useCurrentNode = () =>
-  useSelector(PlaygroundContext, (x) => x.currentNode);
-export const useRoot = () => useSelector(PlaygroundContext, (x) => x.root);
+  useContextSelector(PlaygroundContext, (x) => x.currentNode);
+export const useRoot = () => useContextSelector(PlaygroundContext, (x) => x.root);
 export const useIsVisited = (node: BBNode) =>
-  useSelector(PlaygroundContext, (x) => x.isVisited(node));
+  useContextSelector(PlaygroundContext, (x) => x.isVisited(node));
 export const useAddVisited = () =>
-  useSelector(PlaygroundContext, (x) => x.addVisited);
+  useContextSelector(PlaygroundContext, (x) => x.addVisited);
 export const useRemoveVisited = () =>
-  useSelector(PlaygroundContext, (x) => x.removeVisited);
+  useContextSelector(PlaygroundContext, (x) => x.removeVisited);
