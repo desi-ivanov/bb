@@ -9,8 +9,12 @@ import { Stack } from "./Stack";
 import { solveRaw } from "./utils";
 
 const initialProblem = `max z = x1 + 6x2
+
 5x1 +12x2 <= 40
-- x1 +2x2 <= 3`;
+- x1 +2x2 <= 3
+
+x1 >= 0
+x2 >= 0`;
 export const Main: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const rawProb = useRef(initialProblem);
