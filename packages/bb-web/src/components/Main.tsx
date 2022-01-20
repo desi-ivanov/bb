@@ -65,7 +65,7 @@ export const Main: React.FC = () => {
                 <textarea
                   style={{ width: 300, height: 200 }}
                   onChange={(e) => (rawProb.current = e.target.value)}
-                  defaultValue={example2}
+                  defaultValue={rawProb.current}
                 ></textarea>
               </div>
               <Stack spacing={0.5} style={{ flexDirection: "row", justifyContent:"flex-end" }}>
