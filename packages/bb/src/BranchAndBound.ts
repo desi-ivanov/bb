@@ -1,4 +1,5 @@
 import type { LP, Result } from "glpk.js";
+import { AbstractQueue, Queue } from "./Queue";
 import { Stack } from "./Stack";
 
 export type Node<T> = { value: T; left?: Node<T>; right?: Node<T> };
@@ -67,19 +68,19 @@ export const init = ({
     return { next: () => String(i++) };
   };
 
-  const BranchAndBound = async (initial: LP): Promise<BBSolution> => {
-    const stack = Stack<BBNode>();
+  const BranchAndBound = async (initial: LP, exploration: "dfs" | "bfs"): Promise<BBSolution> => {
+    const q = exploration === "bfs" ? Queue<BBNode>() : Stack<BBNode>();
     const idGenerator = IdGenerator();
     let zStar: Result | null = null;
     const root: BBNode = {
       value: { lp: { ...initial, name: idGenerator.next() }, zStarSnapshot: null },
     };
     const order = [];
-    stack.push(root);
-    
-    while(!stack.empty()) {
-      const currentNode = stack.popOrThrow();
-      order.push(currentNode);      
+    q.push(root);
+
+    while(!q.empty()) {
+      const currentNode = q.popOrThrow();
+      order.push(currentNode);
       const sol = await solve(currentNode.value.lp);
       currentNode.value.solution = sol;
       currentNode.value.zStarSnapshot = zStar;
@@ -118,8 +119,8 @@ export const init = ({
         fractionalVar
       );
 
-      stack.push(p2);
-      stack.push(p1);
+      q.push(p2);
+      q.push(p1);
       currentNode.left = p1;
       currentNode.right = p2;
     }

@@ -54,6 +54,7 @@ BranchAndBound(
         bnds: { type: glpk.GLP_UP, ub: 2, lb: 0 }
       },
     ]
-  }
+  },
+  "dfs"
 ).then(console.log)
 

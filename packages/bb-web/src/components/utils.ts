@@ -3,7 +3,7 @@ import { init, parse, toGlpk } from "@bb/core";
 import type { GLPK, LP } from "glpk.js";
 import { BBSolution, BBNode } from "@bb/core/dist/BranchAndBound";
 
-export const solveLP = (lp: (glpk: GLPK) => LP) =>
+export const solveLP = (lp: (glpk: GLPK) => LP, exploration: "dfs" | "bfs") =>
   import("glpk.js")
     .then(({ default: loadGlpk }) => (loadGlpk as () => Promise<GLPK>)())
     .then((glpk) => {
@@ -21,12 +21,12 @@ export const solveLP = (lp: (glpk: GLPK) => LP) =>
         },
       });
 
-      return BranchAndBound(lp(glpk));
+      return BranchAndBound(lp(glpk), exploration);
     });
 
-export const solveRaw = async (raw: string): Promise<BBSolution> => {
+export const solveRaw = async (raw: string, exploration: "dfs" | "bfs"): Promise<BBSolution> => {
   const p = parse(raw);
-  return solveLP((glpk) => toGlpk(p, glpk));
+  return solveLP((glpk) => toGlpk(p, glpk), exploration);
 };
 
 export const depth = (x: BBNode): number =>

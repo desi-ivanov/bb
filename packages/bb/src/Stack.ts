@@ -1,10 +1,7 @@
+import { AbstractQueue, Node } from "./Queue";
 
-type Node<T> = {
-  value: T
-  next: Node<T> | null
-}
 
-export const Stack = <T>() => {
+export const Stack = <T>(): AbstractQueue<T> => {
   let top: Node<T> | null = null
   return {
     top: () => top,
