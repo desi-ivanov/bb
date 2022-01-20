@@ -22,6 +22,22 @@ x2 >= 0
 x3 >= 0
 x4 >= 0`
 
+export const example3 = `
+max z = x1 + 2x2 + 4x3 + 7x4
+
+2x1 + 5x2 + 2x3 + 7x4 <= 10
+4x1 + 1x2 + 5x3 + 8x4 <= 9
+
+x1 <= 1
+x2 <= 1
+x3 <= 1
+x4 <= 1
+
+x1 >= 0
+x2 >= 0
+x3 >= 0
+x4 >= 0`
+
 export const initialProblem = `max z = x1 + 6x2
 
 5x1 +12x2 <= 40
@@ -31,7 +47,7 @@ x1 >= 0
 x2 >= 0`;
 export const Main: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
-  const rawProb = useRef(example2);
+  const rawProb = useRef(initialProblem);
   const root = useContextSelector(PlaygroundContext, (x) => x.root);
   const selectedNode = useContextSelector(PlaygroundContext, (x) => x.selectedNode);
   const setSolution = useContextSelector(PlaygroundContext, (x) => x.setSolution);
