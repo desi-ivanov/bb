@@ -38,7 +38,7 @@ x2 >= 0
 x3 >= 0
 x4 >= 0`
 
-export const initialProblem = `max z = x1 + 6x2
+export const initialProblem = `max z = x1 + 5x2
 
 5x1 +12x2 <= 40
 - x1 +2x2 <= 3
