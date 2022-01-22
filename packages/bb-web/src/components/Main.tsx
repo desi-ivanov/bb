@@ -8,7 +8,7 @@ import { SolutionsExplorer } from "./SolutionsExplorer";
 import { Stack } from "./Stack";
 import { solveRaw } from "./utils";
 
-const example2 = `max z = x1 + 2x2 + 4x3 + 7x4
+export const example2 = `max z = x1 + 2x2 + 4x3 + 7x4
 
 2x1 + 5x2 + 2x3 + 7x4 <= 10
 
