@@ -48,7 +48,7 @@ export const Playground: React.FC<{ root: BBNode }> = React.memo(({ root }) => {
 
   const d = depth(root);
   const ySpacing = 150;
-  const xSpacing = 150;
+  const xSpacing = 110 * zoom;
   return (
     <div
       style={{
@@ -82,7 +82,7 @@ export const Playground: React.FC<{ root: BBNode }> = React.memo(({ root }) => {
             startY={0}
             ySpacing={ySpacing}
             dedicatedWidth={xSpacing * (2 ** (d - 1))}
-            zoom={zoom}
+            zoom={1}
           />
         </svg>
       </div>
