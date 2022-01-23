@@ -119,8 +119,8 @@ export const init = ({
         fractionalVar
       );
 
-      q.push(p2);
-      q.push(p1);
+      q.push(exploration === "dfs" ? p2 : p1);
+      q.push(exploration === "dfs" ? p1 : p2);
       currentNode.left = p1;
       currentNode.right = p2;
     }
