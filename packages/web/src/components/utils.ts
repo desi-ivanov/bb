@@ -1,9 +1,9 @@
 
 import { init, parse, toGlpk } from "@bb/core";
 import type { GLPK, LP } from "glpk.js";
-import { BBSolution, BBNode } from "@bb/core/dist/BranchAndBound";
+import { BBSolution, BBNode, ExplorationMode } from "@bb/core/dist/BranchAndBound";
 
-export const solveLP = (lp: (glpk: GLPK) => LP, exploration: "dfs" | "bfs") =>
+export const solveLP = (lp: (glpk: GLPK) => LP, exploration: ExplorationMode) =>
   import("glpk.js")
     .then(({ default: loadGlpk }) => (loadGlpk as () => Promise<GLPK>)())
     .then((glpk) => {
@@ -24,7 +24,7 @@ export const solveLP = (lp: (glpk: GLPK) => LP, exploration: "dfs" | "bfs") =>
       return BranchAndBound(lp(glpk), exploration);
     });
 
-export const solveRaw = async (raw: string, exploration: "dfs" | "bfs"): Promise<BBSolution> => {
+export const solveRaw = async (raw: string, exploration: ExplorationMode): Promise<BBSolution> => {
   const p = parse(raw);
   return solveLP((glpk) => toGlpk(p, glpk), exploration);
 };

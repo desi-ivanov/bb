@@ -1,9 +1,22 @@
 import type { LP, Result } from "glpk.js";
+import { PriorityQueue } from "./PriorityQueue";
 import { AbstractQueue, Queue } from "./Queue";
 import { Stack } from "./Stack";
 
-export type Node<T> = { value: T; left?: Node<T>; right?: Node<T> };
-export type BBNode = Node<{ lp: LP; solution?: Result; label?: string, status?: "z-solution" | "r-solution" | "bound" | "unfeasible" | "no-solution", zStarSnapshot: Result | null }>;
+export type Node<T> = {
+  value: T;
+  parent?: Node<T>;
+  left?: Node<T>;
+  right?: Node<T>;
+};
+export type BBNode = Node<{
+  lp: LP;
+  solution?: Result;
+  label?: string;
+  status?: "z-solution" | "r-solution" | "bound" | "unfeasible" | "no-solution";
+  zStarSnapshot: Result | null;
+}>;
+export type ExplorationMode = "dfs" | "bfs" | "best-first";
 export type BBInit = {
   solve: (lp: LP) => Promise<Result>;
   constants: {
@@ -58,8 +71,14 @@ export const init = ({
       ],
     };
     return [
-      { value: { lp: left, label: leftLabel, zStarSnapshot: null } },
-      { value: { lp: right, label: rightLabel, zStarSnapshot: null } },
+      {
+        value: { lp: left, label: leftLabel, zStarSnapshot: null },
+        parent: mainNode,
+      },
+      {
+        value: { lp: right, label: rightLabel, zStarSnapshot: null },
+        parent: mainNode,
+      },
     ];
   };
 
@@ -68,33 +87,44 @@ export const init = ({
     return { next: () => String(i++) };
   };
 
-  const BranchAndBound = async (initial: LP, exploration: "dfs" | "bfs"): Promise<BBSolution> => {
-    const q = exploration === "bfs" ? Queue<BBNode>() : Stack<BBNode>();
+  const BranchAndBound = async (
+    initial: LP,
+    exploration: ExplorationMode
+  ): Promise<BBSolution> => {
+    const q =
+      exploration === "bfs"
+        ? Queue<BBNode>()
+        : exploration === "dfs"
+        ? Stack<BBNode>()
+        : PriorityQueue<BBNode>((x) => x.parent?.value.solution?.result.z ?? 0);
     const idGenerator = IdGenerator();
     let zStar: Result | null = null;
     const root: BBNode = {
-      value: { lp: { ...initial, name: idGenerator.next() }, zStarSnapshot: null },
+      value: {
+        lp: { ...initial, name: idGenerator.next() },
+        zStarSnapshot: null,
+      },
     };
     const order = [];
-    q.push(root);
+    q.add(root);
 
-    while(!q.empty()) {
-      const currentNode = q.popOrThrow();
+    while (!q.empty()) {
+      const currentNode = q.nextOrThrow();
       order.push(currentNode);
       const sol = await solve(currentNode.value.lp);
       currentNode.value.solution = sol;
       currentNode.value.zStarSnapshot = zStar;
 
-      if(sol.result.status === GLP_INFEAS) {
+      if (sol.result.status === GLP_INFEAS) {
         currentNode.value.status = "unfeasible";
         continue;
       }
-      if(sol.result.status === GLP_UNDEF) {
+      if (sol.result.status === GLP_UNDEF) {
         currentNode.value.status = "no-solution";
         continue;
       }
 
-      if(zStar !== null && zStar.result.z >= sol.result.z) {
+      if (zStar !== null && zStar.result.z >= sol.result.z) {
         currentNode.value.status = "bound";
         // upperbound
         continue;
@@ -104,13 +134,13 @@ export const init = ({
         ([_, v]) => !Number.isInteger(v)
       );
 
-      if(fractionalVar === undefined) {
+      if (fractionalVar === undefined) {
         zStar = sol;
-        currentNode.value.status = "z-solution"
+        currentNode.value.status = "z-solution";
         currentNode.value.zStarSnapshot = sol;
         continue;
       }
-      currentNode.value.status = "r-solution"
+      currentNode.value.status = "r-solution";
 
       const [p1, p2] = Branch(
         currentNode,
@@ -119,8 +149,8 @@ export const init = ({
         fractionalVar
       );
 
-      q.push(exploration === "dfs" ? p2 : p1);
-      q.push(exploration === "dfs" ? p1 : p2);
+      q.add(exploration === "bfs" ? p1 : p2);
+      q.add(exploration === "bfs" ? p2 : p1);
       currentNode.left = p1;
       currentNode.right = p2;
     }

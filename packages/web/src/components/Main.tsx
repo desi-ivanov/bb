@@ -1,3 +1,4 @@
+import { ExplorationMode } from "@bb/core/dist/BranchAndBound";
 import { useContextSelector } from "@fluentui/react-context-selector";
 import React, { useCallback, useRef, useState } from "react";
 import { Legend } from "./Legend";
@@ -69,7 +70,7 @@ export const Main: React.FC = () => {
   const root = useContextSelector(PlaygroundContext, (x) => x.root);
   const selectedNode = useContextSelector(PlaygroundContext, (x) => x.selectedNode);
   const setSolution = useContextSelector(PlaygroundContext, (x) => x.setSolution);
-  const [explorationMode, setExplorationMode] = useState<"bfs" | "dfs">("dfs");
+  const [explorationMode, setExplorationMode] = useState<ExplorationMode>("dfs");
   const handleSolve = useCallback(() => {
     setError(null);
     solveRaw(rawProb.current, explorationMode).then(setSolution).catch(setError);
@@ -106,6 +107,7 @@ export const Main: React.FC = () => {
                 <select value={explorationMode} onChange={e => setExplorationMode(e.target.value as "bfs" | "dfs")}>
                   <option value="dfs">dfs</option>
                   <option value="bfs">bfs</option>
+                  <option value="best-first">best-first</option>
                 </select>
                 <button onClick={handleSolve}>Solve</button>
               </Stack>

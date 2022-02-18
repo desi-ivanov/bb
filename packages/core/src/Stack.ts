@@ -4,12 +4,11 @@ import { AbstractQueue, Node } from "./Queue";
 export const Stack = <T>(): AbstractQueue<T> => {
   let top: Node<T> | null = null
   return {
-    top: () => top,
-    push: (value: T) => {
+    add: (value: T) => {
       top = { value, next: top }
     },
     empty: () => top === null,
-    popOrThrow: () => {
+    nextOrThrow: () => {
       if(top === null) throw new Error("Empty stack");
       const value = top.value;
       top = top.next;

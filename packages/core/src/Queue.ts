@@ -4,18 +4,16 @@ export type Node<T> = {
 }
 
 export type AbstractQueue<T> = {
-  top: () => Node<T> | null
-  push: (value: T) => void
+  add: (value: T) => void
   empty: () => boolean
-  popOrThrow: () => T
+  nextOrThrow: () => T
 }
 
-export const Queue = <T>() => {
+export const Queue = <T>(): AbstractQueue<T> => {
   let top: Node<T> | null = null
   let bot: Node<T> | null = null
   return {
-    top: () => top,
-    push: (value: T) => {
+    add: (value: T) => {
       const node = { value, next: null }
       if(bot === null) {
         bot = node
@@ -26,7 +24,7 @@ export const Queue = <T>() => {
       }
     },
     empty: () => top === null,
-    popOrThrow: () => {
+    nextOrThrow: () => {
       if(top === null) throw new Error("Empty queue");
       const value = top.value;
       top = top.next;
