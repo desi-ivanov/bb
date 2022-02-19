@@ -8,11 +8,7 @@ type ParsedProblem = {
 
 const parseSign = (raw: string): { sign: number; rest: string } => {
   const trimmed = raw.trimStart();
-  return trimmed.startsWith("-")
-    ? { sign: -1, rest: trimmed.slice(1) }
-    : trimmed.startsWith("+")
-    ? { sign: 1, rest: trimmed.slice(1) }
-    : { sign: 1, rest: trimmed };
+  return trimmed.startsWith("-") ? { sign: -1, rest: trimmed.slice(1) } : trimmed.startsWith("+") ? { sign: 1, rest: trimmed.slice(1) } : { sign: 1, rest: trimmed };
 };
 
 const parseNumExpr = (raw: string): { value?: number; rest: string } => {
@@ -61,22 +57,14 @@ const parseVars = (raw: string): { vars: Var[]; rest: string } => {
 
 const parseOp = (raw: string): { op?: "<=" | ">=" | "="; rest: string } => {
   const trimmed = raw.trimStart();
-  const op = trimmed.startsWith("<=")
-    ? "<="
-    : trimmed.startsWith(">=")
-    ? ">="
-    : trimmed.startsWith("=")
-    ? "="
-    : undefined;
+  const op = trimmed.startsWith("<=") ? "<=" : trimmed.startsWith(">=") ? ">=" : trimmed.startsWith("=") ? "=" : undefined;
   return {
     op: op,
     rest: trimmed.slice(op?.length),
   };
 };
 
-const parseConstraint = (
-  line: string
-): { constraint: Constraint; rest: string } => {
+const parseConstraint = (line: string): { constraint: Constraint; rest: string } => {
   const trimmed = line.trimStart();
   const { vars, rest } = parseVars(trimmed);
   const { op, rest: rest2 } = parseOp(rest);
@@ -107,11 +95,7 @@ export const parse = (problem: string): ParsedProblem => {
   };
 };
 
-export const toGlpk = (
-  p: ParsedProblem,
-  glpk: GLPK,
-  name: string = "problem"
-): LP => {
+export const toGlpk = (p: ParsedProblem, glpk: GLPK, name: string = "problem"): LP => {
   return {
     name: name,
     objective: {
@@ -123,12 +107,7 @@ export const toGlpk = (
       name: `c${i}`,
       vars: c.vars,
       bnds: {
-        type:
-          c.op === "="
-            ? glpk.GLP_DB
-            : c.op === "<="
-            ? glpk.GLP_UP
-            : glpk.GLP_LO,
+        type: c.op === "=" ? glpk.GLP_DB : c.op === "<=" ? glpk.GLP_UP : glpk.GLP_LO,
         ub: c.right,
         lb: c.right,
       },

@@ -4,4 +4,4 @@ export const Legend = {
   visited_node: "#666",
   unvisited_node: "#ccc",
   selected_node: "#f44",
-}
+};

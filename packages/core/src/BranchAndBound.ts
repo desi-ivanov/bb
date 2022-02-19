@@ -32,16 +32,8 @@ export type BBSolution = {
   order: BBNode[];
 };
 
-export const init = ({
-  solve,
-  constants: { GLP_LO, GLP_UP, GLP_INFEAS, GLP_UNDEF },
-}: BBInit) => {
-  const Branch = (
-    mainNode: BBNode,
-    leftName: string,
-    rightName: string,
-    [name, value]: [string, number]
-  ): [BBNode, BBNode] => {
+export const init = ({ solve, constants: { GLP_LO, GLP_UP, GLP_INFEAS, GLP_UNDEF } }: BBInit) => {
+  const Branch = (mainNode: BBNode, leftName: string, rightName: string, [name, value]: [string, number]): [BBNode, BBNode] => {
     const leftVarBound = Math.floor(value);
     const rightVarBound = Math.ceil(value);
     const leftLabel = `${name}≤${leftVarBound}`;
@@ -87,16 +79,8 @@ export const init = ({
     return { next: () => String(i++) };
   };
 
-  const BranchAndBound = async (
-    initial: LP,
-    exploration: ExplorationMode
-  ): Promise<BBSolution> => {
-    const q: AbstractQueue<BBNode> =
-      exploration === "bfs"
-        ? Queue<BBNode>()
-        : exploration === "dfs"
-          ? Stack<BBNode>()
-          : PriorityQueue<BBNode>((x) => x.parent?.value.solution?.result.z ?? 0);
+  const BranchAndBound = async (initial: LP, exploration: ExplorationMode): Promise<BBSolution> => {
+    const q: AbstractQueue<BBNode> = exploration === "bfs" ? Queue<BBNode>() : exploration === "dfs" ? Stack<BBNode>() : PriorityQueue<BBNode>((x) => x.parent?.value.solution?.result.z ?? 0);
     const idGenerator = IdGenerator();
     let zStar: Result | null = null;
     const root: BBNode = {
@@ -108,23 +92,23 @@ export const init = ({
     const order = [];
     q.add(root);
 
-    while(!q.empty()) {
+    while (!q.empty()) {
       const currentNode = q.nextOrThrow();
       order.push(currentNode);
       const sol = await solve(currentNode.value.lp);
       currentNode.value.solution = sol;
       currentNode.value.zStarSnapshot = zStar;
 
-      if(sol.result.status === GLP_INFEAS) {
+      if (sol.result.status === GLP_INFEAS) {
         currentNode.value.status = "unfeasible";
         continue;
       }
-      if(sol.result.status === GLP_UNDEF) {
+      if (sol.result.status === GLP_UNDEF) {
         currentNode.value.status = "no-solution";
         continue;
       }
 
-      if(zStar !== null && zStar.result.z >= sol.result.z) {
+      if (zStar !== null && zStar.result.z >= sol.result.z) {
         currentNode.value.status = "bound";
         // upperbound
         continue;
@@ -132,7 +116,7 @@ export const init = ({
 
       const fractionalVar = Object.entries(sol.result.vars).find(([_, v]) => !Number.isInteger(v));
 
-      if(fractionalVar === undefined) {
+      if (fractionalVar === undefined) {
         zStar = sol;
         currentNode.value.status = "z-solution";
         currentNode.value.zStarSnapshot = sol;

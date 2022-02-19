@@ -6,13 +6,13 @@ import { useContextSelector } from "@fluentui/react-context-selector";
 
 export const SolutionsExplorer: React.FC = () => {
   const currentNode = useCurrentNode();
-  const prevNode = useContextSelector(PlaygroundContext, x => x.prevNode);
-  const nextNode = useContextSelector(PlaygroundContext, x => x.nextNode);
+  const prevNode = useContextSelector(PlaygroundContext, (x) => x.prevNode);
+  const nextNode = useContextSelector(PlaygroundContext, (x) => x.nextNode);
   return (
     currentNode && (
       <Stack spacing={1}>
         <strong>Solution explorer</strong>
-        <Stack style={{ flexDirection: "row", }} spacing={1}>
+        <Stack style={{ flexDirection: "row" }} spacing={1}>
           <button onClick={prevNode}>Prev node</button>
           <button onClick={nextNode}>Next node</button>
         </Stack>
