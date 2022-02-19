@@ -38,8 +38,8 @@ export const SVGNode: React.FC<{
       {node.right && (
         <SVGNode parentX={x} parentY={y} startX={startX + dedicatedWidth / 2} startY={startY + ySpacing} dedicatedWidth={dedicatedWidth / 2} ySpacing={ySpacing} node={node.right} zoom={zoom} />
       )}
-      <g onClick={handleClickNode} opacity={isVisited ? 1 : 0.5}>
-        <text x={zoom * x} y={zoom * (y - 35)} textAnchor="middle" alignmentBaseline="middle" fontWeight={500} fontSize={zoom * 14}>
+      <g onClick={handleClickNode}>
+        <text x={zoom * x} y={zoom * (y - 35)} textAnchor="middle" alignmentBaseline="middle" fontWeight={500} fontSize={zoom * 14} opacity={isVisited ? 1 : 0.5}>
           #{node.value.lp.name} {StatusToLabel[node.value.status!]}
         </text>
         <circle
