@@ -2,6 +2,7 @@
   "name": "@bb/web",
   "version": "0.1.0",
   "private": true,
+  "homepage": "./",
   "dependencies": {
     "@bb/core": "1.0.0",
     "@fluentui/react-context-selector": "^9.0.0-beta.4",
