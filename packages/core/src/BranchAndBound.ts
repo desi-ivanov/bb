@@ -91,12 +91,12 @@ export const init = ({
     initial: LP,
     exploration: ExplorationMode
   ): Promise<BBSolution> => {
-    const q =
+    const q: AbstractQueue<BBNode> =
       exploration === "bfs"
         ? Queue<BBNode>()
         : exploration === "dfs"
-        ? Stack<BBNode>()
-        : PriorityQueue<BBNode>((x) => x.parent?.value.solution?.result.z ?? 0);
+          ? Stack<BBNode>()
+          : PriorityQueue<BBNode>((x) => x.parent?.value.solution?.result.z ?? 0);
     const idGenerator = IdGenerator();
     let zStar: Result | null = null;
     const root: BBNode = {
@@ -108,33 +108,31 @@ export const init = ({
     const order = [];
     q.add(root);
 
-    while (!q.empty()) {
+    while(!q.empty()) {
       const currentNode = q.nextOrThrow();
       order.push(currentNode);
       const sol = await solve(currentNode.value.lp);
       currentNode.value.solution = sol;
       currentNode.value.zStarSnapshot = zStar;
 
-      if (sol.result.status === GLP_INFEAS) {
+      if(sol.result.status === GLP_INFEAS) {
         currentNode.value.status = "unfeasible";
         continue;
       }
-      if (sol.result.status === GLP_UNDEF) {
+      if(sol.result.status === GLP_UNDEF) {
         currentNode.value.status = "no-solution";
         continue;
       }
 
-      if (zStar !== null && zStar.result.z >= sol.result.z) {
+      if(zStar !== null && zStar.result.z >= sol.result.z) {
         currentNode.value.status = "bound";
         // upperbound
         continue;
       }
 
-      const fractionalVar = Object.entries(sol.result.vars).find(
-        ([_, v]) => !Number.isInteger(v)
-      );
+      const fractionalVar = Object.entries(sol.result.vars).find(([_, v]) => !Number.isInteger(v));
 
-      if (fractionalVar === undefined) {
+      if(fractionalVar === undefined) {
         zStar = sol;
         currentNode.value.status = "z-solution";
         currentNode.value.zStarSnapshot = sol;
@@ -142,12 +140,7 @@ export const init = ({
       }
       currentNode.value.status = "r-solution";
 
-      const [p1, p2] = Branch(
-        currentNode,
-        idGenerator.next(),
-        idGenerator.next(),
-        fractionalVar
-      );
+      const [p1, p2] = Branch(currentNode, idGenerator.next(), idGenerator.next(), fractionalVar);
 
       q.add(exploration === "bfs" ? p1 : p2);
       q.add(exploration === "bfs" ? p2 : p1);
