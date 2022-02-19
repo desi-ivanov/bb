@@ -5,6 +5,7 @@ import { Legend } from "./Legend";
 import { NodeInfo } from "./NodeInfo";
 import { Playground } from "./Playground";
 import { PlaygroundContext } from "./PlaygroundProvider";
+import { PseudocodeModal } from "./PseudocodeModal";
 import { SolutionsExplorer } from "./SolutionsExplorer";
 import { Stack } from "./Stack";
 import { solveRaw } from "./utils";
@@ -68,7 +69,8 @@ export const Main: React.FC = () => {
   const root = useContextSelector(PlaygroundContext, (x) => x.root);
   const selectedNode = useContextSelector(PlaygroundContext, (x) => x.selectedNode);
   const setSolution = useContextSelector(PlaygroundContext, (x) => x.setSolution);
-  const [explorationMode, setExplorationMode] = useState<ExplorationMode>("dfs");
+  const [explorationMode, setExplorationMode] = useState<ExplorationMode>("bfs");
+  const [isPseudocodeModalVisible, setIsPseudocodeModalVisible] = useState(false);
   const handleSolve = useCallback(() => {
     setError(null);
     solveRaw(rawProb.current, explorationMode).then(setSolution).catch(setError);
@@ -82,8 +84,10 @@ export const Main: React.FC = () => {
         height: "100vh",
         overflow: "auto hidden",
         minWidth: 700,
+        position: "relative"
       }}
     >
+      {isPseudocodeModalVisible && (<PseudocodeModal onClose={() => setIsPseudocodeModalVisible(false)} />)}
       <Stack style={{
         flexDirection: "row", overflow: "hidden", flex: 1,
         padding: 16,
@@ -99,10 +103,11 @@ export const Main: React.FC = () => {
                 <textarea style={{ width: 300, height: 200 }} onChange={(e) => (rawProb.current = e.target.value)} defaultValue={rawProb.current}></textarea>
               </div>
               <Stack spacing={0.5} style={{ flexDirection: "row", justifyContent: "flex-end" }}>
+                <button onClick={() => setIsPseudocodeModalVisible(true)}>view pseudocode</button>
                 <select value={explorationMode} onChange={(e) => setExplorationMode(e.target.value as "bfs" | "dfs")}>
-                  <option value="dfs">dfs</option>
                   <option value="bfs">bfs</option>
                   <option value="best-first">best-first</option>
+                  <option value="dfs">dfs</option>
                 </select>
                 <button onClick={handleSolve}>Solve</button>
               </Stack>
@@ -129,10 +134,10 @@ export const Main: React.FC = () => {
             </div>
             <Stack style={{ border: "1px solid #eee", padding: 16 }} spacing={0.25}>
               <strong>Branch and Bound explorer</strong>
-              <div>Combinatorial Optimization Project</div>
+              <div>Combinatorial Optimization</div>
               <div>Computer Science Department</div>
               <div>University of Truin</div>
-              <div>2021</div>
+              <div>2021 Project</div>
               <div><a href="https://github.com/evolveyourmind">Credits</a> · <a href="https://github.com/evolveyourmind/bb">GitHub</a></div>
             </Stack>
           </Stack>
