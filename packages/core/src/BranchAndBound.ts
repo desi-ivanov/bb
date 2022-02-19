@@ -44,8 +44,8 @@ export const init = ({
   ): [BBNode, BBNode] => {
     const leftVarBound = Math.floor(value);
     const rightVarBound = Math.ceil(value);
-    const leftLabel = `${name}<=${leftVarBound}`;
-    const rightLabel = `${name}>=${rightVarBound}`;
+    const leftLabel = `${name}≤${leftVarBound}`;
+    const rightLabel = `${name}≥${rightVarBound}`;
     const left: LP = {
       ...mainNode.value.lp,
       name: leftName,
