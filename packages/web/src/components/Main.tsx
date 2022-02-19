@@ -84,80 +84,71 @@ export const Main: React.FC = () => {
         minWidth: 700,
       }}
     >
-      <Stack
-        style={{
-          padding: 16,
-          overflow: "auto hidden",
-          width: "100%",
-        }}
-        spacing={1}
-      >
-        <div>
-          <strong>Branch and bound</strong>
-          <div></div>
-        </div>
-        <Stack style={{ flexDirection: "row", overflow: "hidden", flex: 1 }} spacing={1}>
-          <div style={{ overflow: "auto" }}>
-            <Stack spacing={1}>
-              <Stack spacing={1} style={{ border: "1px solid #eee", padding: 16 }}>
-                <div>
-                  <strong>Problem</strong>
-                </div>
-                <div>
-                  <textarea style={{ width: 300, height: 200 }} onChange={(e) => (rawProb.current = e.target.value)} defaultValue={rawProb.current}></textarea>
-                </div>
-                <Stack spacing={0.5} style={{ flexDirection: "row", justifyContent: "flex-end" }}>
-                  <select value={explorationMode} onChange={(e) => setExplorationMode(e.target.value as "bfs" | "dfs")}>
-                    <option value="dfs">dfs</option>
-                    <option value="bfs">bfs</option>
-                    <option value="best-first">best-first</option>
-                  </select>
-                  <button onClick={handleSolve}>Solve</button>
-                </Stack>
-                {error && <div style={{ color: "red" }}>{String(error)}</div>}
+      <Stack style={{
+        flexDirection: "row", overflow: "hidden", flex: 1,
+        padding: 16,
+        width: "100%",
+      }} spacing={1}>
+        <div style={{ overflow: "auto" }}>
+          <Stack spacing={1}>
+            <Stack spacing={1} style={{ border: "1px solid #eee", padding: 16 }}>
+              <div>
+                <strong>Problem</strong>
+              </div>
+              <div>
+                <textarea style={{ width: 300, height: 200 }} onChange={(e) => (rawProb.current = e.target.value)} defaultValue={rawProb.current}></textarea>
+              </div>
+              <Stack spacing={0.5} style={{ flexDirection: "row", justifyContent: "flex-end" }}>
+                <select value={explorationMode} onChange={(e) => setExplorationMode(e.target.value as "bfs" | "dfs")}>
+                  <option value="dfs">dfs</option>
+                  <option value="bfs">bfs</option>
+                  <option value="best-first">best-first</option>
+                </select>
+                <button onClick={handleSolve}>Solve</button>
               </Stack>
-              <div style={{ border: "1px solid #eee", padding: 16 }}>
-                <Stack spacing={1}>
-                  <strong>Legend</strong>
-                  {Object.entries(Legend).map(([k, v]) => (
-                    <Stack key={k} style={{ flexDirection: "row", alignItems: "center" }} spacing={0.5}>
-                      <div style={{ width: 20, height: 20, backgroundColor: v }} />
-                      <span>{k}</span>
-                    </Stack>
-                  ))}
-                </Stack>
-              </div>
-              <div style={{ border: "1px solid #eee", padding: 16 }}>
-                <SolutionsExplorer />
-              </div>
-              {selectedNode && (
-                <div style={{ border: "1px solid #eee", padding: 16 }}>
-                  <NodeInfo node={selectedNode} />
-                </div>
-              )}
-              <div style={{ border: "1px solid #eee", padding: 16 }}>
-                <div>Combinatorial Optimization Project 2021</div>
-                <div>Computer Science Department</div>
-                <div>University of Truin</div>
-                <div>
-                  <a href="https://github.com/evolveyourmind">Credits</a> · <a href="https://github.com/evolveyourmind/bb">GitHub</a>
-                </div>
-              </div>
+              {error && <div style={{ color: "red" }}>{String(error)}</div>}
             </Stack>
-          </div>
-          <div
-            style={{
-              flex: 1,
-              display: "flex",
-              flexDirection: "column",
-              overflow: "hidden",
-              border: "1px solid #eee",
-              width: "100%",
-            }}
-          >
-            {root && <Playground root={root} />}
-          </div>
-        </Stack>
+            {selectedNode && (
+              <div style={{ border: "1px solid #eee", padding: 16 }}>
+                <NodeInfo node={selectedNode} />
+              </div>
+            )}
+            <div style={{ border: "1px solid #eee", padding: 16 }}>
+              <SolutionsExplorer />
+            </div>
+            <div style={{ border: "1px solid #eee", padding: 16 }}>
+              <Stack spacing={1}>
+                <strong>Legend</strong>
+                {Object.entries(Legend).map(([k, v]) => (
+                  <Stack key={k} style={{ flexDirection: "row", alignItems: "center" }} spacing={0.5}>
+                    <div style={{ width: 20, height: 20, backgroundColor: v }} />
+                    <span>{k}</span>
+                  </Stack>
+                ))}
+              </Stack>
+            </div>
+            <Stack style={{ border: "1px solid #eee", padding: 16 }} spacing={0.25}>
+              <strong>Branch and Bound explorer</strong>
+              <div>Combinatorial Optimization Project</div>
+              <div>Computer Science Department</div>
+              <div>University of Truin</div>
+              <div>2021</div>
+              <div><a href="https://github.com/evolveyourmind">Credits</a> · <a href="https://github.com/evolveyourmind/bb">GitHub</a></div>
+            </Stack>
+          </Stack>
+        </div>
+        <div
+          style={{
+            flex: 1,
+            display: "flex",
+            flexDirection: "column",
+            overflow: "hidden",
+            border: "1px solid #eee",
+            width: "100%",
+          }}
+        >
+          {root && <Playground root={root} />}
+        </div>
       </Stack>
     </div>
   );

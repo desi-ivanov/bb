@@ -40,7 +40,7 @@ export const SVGNode: React.FC<{
       )}
       <g onClick={handleClickNode} opacity={isVisited ? 1 : 0.5}>
         <text x={zoom * x} y={zoom * (y - 35)} textAnchor="middle" alignmentBaseline="middle" fontWeight={500} fontSize={zoom * 14}>
-          #{node.value.lp.name} {node.value.status}
+          #{node.value.lp.name} {StatusToLabel[node.value.status!]}
         </text>
         <circle
           cx={zoom * x}
@@ -48,10 +48,18 @@ export const SVGNode: React.FC<{
           r={zoom * 24}
           fill={Legend[isSelected ? "selected_node" : isBest ? "current_best_solution" : currentNode === node ? "current_node" : isVisited ? "visited_node" : "unvisited_node"]}
         />
-        <text x={zoom * x} y={zoom * y} textAnchor="middle" alignmentBaseline="middle" fontWeight={600} fill="#fff" fontSize={zoom * 12}>
+        <text x={zoom * x} y={zoom * y} textAnchor="middle" alignmentBaseline="middle" fontWeight={700} fill="#fff" fontSize={zoom * 12}>
           {node.value.solution?.result.z.toFixed(1)}
         </text>
       </g>
     </React.Fragment>
   );
 };
+
+const StatusToLabel: Record<Exclude<BBNode['value']['status'], undefined>, string> = {
+  "bound": "Bound",
+  "z-solution": "Z-sol",
+  "r-solution": "R-sol",
+  "no-solution": "No-sol",
+  "unfeasible": "Unfeas",
+}
