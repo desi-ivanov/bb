@@ -83,10 +83,20 @@ export const SVGNode: React.FC<{
         onClick={handleClickNode}
         opacity={isVisited ? 1 : 0.5}
       >
+        <text
+          x={zoom * x}
+          y={zoom * (y - 35)}
+          textAnchor="middle"
+          alignmentBaseline="middle"
+          fontWeight={500}
+          fontSize={zoom * 14}
+        >
+          #{node.value.lp.name} {node.value.status}
+        </text>
         <circle
           cx={zoom * x}
           cy={zoom * y}
-          r={zoom * 20}
+          r={zoom * 24}
           fill={
             Legend[
             isSelected
@@ -106,31 +116,11 @@ export const SVGNode: React.FC<{
           y={zoom * y}
           textAnchor="middle"
           alignmentBaseline="middle"
-          fontWeight={800}
+          fontWeight={600}
           fill="#fff"
-          fontSize={zoom * 15}
+          fontSize={zoom * 12}
         >
-          {node.value.lp.name}
-        </text>
-        <text
-          x={zoom * x}
-          y={zoom * (y - 30)}
-          textAnchor="middle"
-          alignmentBaseline="middle"
-          fontWeight={800}
-          fontSize={zoom * 15}
-        >
-          {node.value.status}
-        </text>
-        <text
-          x={zoom * x}
-          y={zoom * (y + 30)}
-          textAnchor="middle"
-          alignmentBaseline="middle"
-          fontWeight={800}
-          fontSize={zoom * 15}
-        >
-          {node.value.solution?.result.z.toFixed(2)}
+          {node.value.solution?.result.z.toFixed(1)}
         </text>
       </g>
     </React.Fragment>
