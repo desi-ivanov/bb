@@ -35,7 +35,7 @@ jobs:
           git clone https://github.com/evolveyourmind/bb --depth 1 --branch gh-pages gh-pages
           cd gh-pages
           git rm -rf .
-          cp -r ../packages/bb/web/* .
+          cp -r ../packages/web/dist/* .
           git add -A
           git commit -m "Update gh-pages"
           git push origin gh-pages
