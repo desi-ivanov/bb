@@ -1,0 +1,37 @@
+name: build-gh-pages
+
+on:
+  push:
+    branches:
+      - master
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  build-gh-pages:
+    name: ${{ matrix.command }}
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Use Node.js 16
+        uses: actions/setup-node@v1
+        with:
+          node-version: 16
+
+      - run: yarn install
+
+      - run: yarn workspace @bb/web build
+
+      - name: Push dist to gh-pages branch
+        run: |
+          git clone --depth 1 --branch gh-pages
+          cd gh-pages
+          git rm -rf .
+          cp -r ../packages/bb/web/* .
+          git add -A
+          git commit -m "Update gh-pages"
+          git push origin gh-pages
