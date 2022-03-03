@@ -30,12 +30,12 @@ jobs:
       - name: Build web
         run: yarn workspace @bb/web run build
 
-      - name: Push dist to gh-pages branch
+      - name: Push build to gh-pages branch
         run: |
           git clone https://github.com/evolveyourmind/bb --depth 1 --branch gh-pages gh-pages
           cd gh-pages
           git rm -rf .
-          cp -r ../packages/web/dist/* .
+          cp -r ../packages/web/build/* .
           git add -A
           git commit -m "Update gh-pages"
           git push origin gh-pages
