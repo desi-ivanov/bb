@@ -24,7 +24,11 @@ jobs:
 
       - run: yarn install
 
-      - run: yarn workspace @bb/web build
+      - name: Build core
+        run: yarn workspace @bb/core run build
+
+      - name: Build web
+        run: yarn workspace @bb/web run build
 
       - name: Push dist to gh-pages branch
         run: |
