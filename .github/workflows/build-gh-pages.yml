@@ -32,6 +32,8 @@ jobs:
 
       - name: Push build to gh-pages branch
         run: |
+          git config --global user.email "action@GitHub.com"
+          git config --global user.name "GitHub action"
           git clone https://github.com/evolveyourmind/bb --depth 1 --branch gh-pages gh-pages
           cd gh-pages
           git rm -rf .
