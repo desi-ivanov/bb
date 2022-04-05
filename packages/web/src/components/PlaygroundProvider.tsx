@@ -82,7 +82,7 @@ export const PlaygroundProvider: React.FC = ({ children }) => {
         setVisited(solution.order.slice(0, optIdx + 1).reduce((acc, x) => ({ ...acc, [x.value.lp.name]: true }), {}));
       }
     }
-  }, [solution, root]);
+  }, [solution]);
 
   return (
     <PlaygroundContext.Provider
