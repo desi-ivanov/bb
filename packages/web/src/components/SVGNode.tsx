@@ -1,7 +1,7 @@
 import { BBNode } from "@bb/core/dist/BranchAndBound";
 import { useContextSelector } from "@fluentui/react-context-selector";
 import React from "react";
-import { Legend } from "./Legend";
+import { Legend, StatusToLabel } from "./Legend";
 import { PlaygroundContext, useCurrentNode, useIsVisited } from "./PlaygroundProvider";
 
 export const SVGNode: React.FC<{
@@ -55,11 +55,3 @@ export const SVGNode: React.FC<{
     </React.Fragment>
   );
 };
-
-const StatusToLabel: Record<Exclude<BBNode['value']['status'], undefined>, string> = {
-  "bound": "Bound",
-  "z-solution": "Integer",
-  "r-solution": "Fractional",
-  "no-solution": "Unsolvable",
-  "unbounded": "Unbounded",
-}

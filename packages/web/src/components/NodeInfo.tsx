@@ -1,16 +1,17 @@
 import type { BBNode } from "@bb/core/dist/BranchAndBound";
 import { LP } from "glpk.js";
 import React, { memo } from "react";
+import { StatusToLabel } from "./Legend";
 import { Stack } from "./Stack";
 
 const useGlpkTranslator =
   () =>
-  (context: "bnds" | "obj-direction", value: number): string => {
-    if (context === "obj-direction") {
-      return value === 1 ? "min" : "max";
-    }
-    return value === 3 ? "<=" : value === 2 ? ">=" : "=";
-  };
+    (context: "bnds" | "obj-direction", value: number): string => {
+      if(context === "obj-direction") {
+        return value === 1 ? "min" : "max";
+      }
+      return value === 3 ? "<=" : value === 2 ? ">=" : "=";
+    };
 
 export const NodeInfo: React.FC<{ node: BBNode }> = memo(({ node }) => {
   const glpkTranslator = useGlpkTranslator();
@@ -21,17 +22,7 @@ export const NodeInfo: React.FC<{ node: BBNode }> = memo(({ node }) => {
           <strong>Node</strong>: {node.value.lp.name}
         </div>
         <div>
-          <strong>Status</strong>: {node.value.status} ({node.value.solution?.result.status})
-        </div>
-        <div>
-          <strong>Best Int z</strong>:{" "}
-          {node.value.zStarSnapshot ? (
-            <span>
-              {node.value.zStarSnapshot?.result.z} (Node #{node.value.zStarSnapshot?.name})
-            </span>
-          ) : (
-            <span>None</span>
-          )}
+          <strong>Status</strong>: {node.value.status ? StatusToLabel[node.value.status] : "Unknown"}
         </div>
       </Stack>
       {node.value.solution && (
