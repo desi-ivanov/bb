@@ -19,13 +19,13 @@ export const NodeInfo: React.FC<{ node: BBNode }> = memo(({ node }) => {
     <Stack spacing={1}>
       <Stack spacing={0.5}>
         <div>
-          <strong>Node</strong>: {node.value.lp.name}
+          <strong>Node</strong>: #{node.value.lp.name}
         </div>
         <div>
           <strong>Status</strong>: {node.value.status ? StatusToLabel[node.value.status] : "Unknown"}
         </div>
       </Stack>
-      {node.value.solution && (
+      {node.value.solution && node.value.status !== "no-solution" && node.value.status !== "unbounded" && (
         <Stack spacing={0.5}>
           <div>
             <strong>z</strong> = {toFixedWrp(node.value.solution.result.z, 6)}

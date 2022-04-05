@@ -12,6 +12,6 @@ export const StatusToLabel: Record<Exclude<BBNode["value"]["status"], undefined>
   bound: "Bound",
   "z-solution": "Integer",
   "r-solution": "Fractional",
-  "no-solution": "Unsolvable",
+  "no-solution": "Infeasible",
   unbounded: "Unbounded",
 };
