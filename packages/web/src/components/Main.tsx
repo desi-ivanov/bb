@@ -136,7 +136,7 @@ export const Main: React.FC = () => {
               <strong>Branch and Bound explorer</strong>
               <div>Combinatorial Optimization</div>
               <div>Computer Science Department</div>
-              <div>University of Truin</div>
+              <div>University of Turin</div>
               <div>2021 Project</div>
               <div><a href="https://github.com/evolveyourmind">Credits</a> · <a href="https://github.com/evolveyourmind/bb">GitHub</a></div>
             </Stack>
