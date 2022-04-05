@@ -38,7 +38,7 @@ export const SVGNode: React.FC<{
       {node.right && (
         <SVGNode parentX={x} parentY={y} startX={startX + dedicatedWidth / 2} startY={startY + ySpacing} dedicatedWidth={dedicatedWidth / 2} ySpacing={ySpacing} node={node.right} zoom={zoom} />
       )}
-      <g onClick={handleClickNode}>
+      <g onClick={handleClickNode} style={{ cursor: "pointer" }}>
         <text x={zoom * x} y={zoom * (y - 35)} textAnchor="middle" alignmentBaseline="middle" fontWeight={500} fontSize={zoom * 14} opacity={isVisited ? 1 : 0.5}>
           #{node.value.lp.name} {StatusToLabel[node.value.status!]}
         </text>
@@ -58,8 +58,8 @@ export const SVGNode: React.FC<{
 
 const StatusToLabel: Record<Exclude<BBNode['value']['status'], undefined>, string> = {
   "bound": "Bound",
-  "z-solution": "Z-sol",
-  "r-solution": "R-sol",
-  "no-solution": "No-sol",
-  "unfeasible": "Unfeas",
+  "z-solution": "Integer",
+  "r-solution": "Fractional",
+  "no-solution": "Unsolvable",
+  "unbounded": "Unbounded",
 }

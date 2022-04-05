@@ -102,6 +102,7 @@ export const Main: React.FC = () => {
               <div>
                 <textarea style={{ width: 300, height: 200 }} onChange={(e) => (rawProb.current = e.target.value)} defaultValue={rawProb.current}></textarea>
               </div>
+              <span>All variables are considered integer</span>
               <Stack spacing={0.5} style={{ flexDirection: "row", justifyContent: "flex-end" }}>
                 <button onClick={() => setIsPseudocodeModalVisible(true)}>view pseudocode</button>
                 <select value={explorationMode} onChange={(e) => setExplorationMode(e.target.value as "bfs" | "dfs")}>

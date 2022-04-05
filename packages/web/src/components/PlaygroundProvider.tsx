@@ -13,20 +13,22 @@ export type PlaygroundType = {
   prevNode: () => void;
   nextNode: () => void;
   selectNode: (node: BBNode | null) => void;
+  goToOptimal: () => void
 };
 
 export const PlaygroundContext = createContext<PlaygroundType>({
-  setSolution: () => {},
+  setSolution: () => { },
   solution: null,
   root: null,
   currentNode: null,
   selectedNode: null,
   isVisited: () => false,
-  addVisited: () => {},
-  removeVisited: () => {},
-  nextNode: () => {},
-  prevNode: () => {},
-  selectNode: () => {},
+  addVisited: () => { },
+  removeVisited: () => { },
+  nextNode: () => { },
+  prevNode: () => { },
+  selectNode: () => { },
+  goToOptimal: () => { },
 });
 
 export const PlaygroundProvider: React.FC = ({ children }) => {
@@ -45,7 +47,7 @@ export const PlaygroundProvider: React.FC = ({ children }) => {
     setCurrentSolution(sol);
     setSelectedNode(null);
     idxRef.current = 0;
-    if (sol) {
+    if(sol) {
       setRoot(sol.root);
       setCurrentNode(sol.root);
       setVisited(sol ? { [sol.root.value.lp.name]: true } : {});
@@ -53,22 +55,34 @@ export const PlaygroundProvider: React.FC = ({ children }) => {
   }, []);
 
   const prevNode = useCallback(() => {
-    if (solution) {
+    if(solution) {
       const x = solution.order[idxRef.current];
-      if (x && idxRef.current > 0) removeVisited(x);
+      if(x && idxRef.current > 0) removeVisited(x);
       idxRef.current = Math.max(0, idxRef.current - 1);
       setCurrentNode(solution.order[idxRef.current]);
     }
   }, [removeVisited, solution]);
 
   const nextNode = useCallback(() => {
-    if (solution) {
+    if(solution) {
       idxRef.current = Math.min(solution.order.length - 1, idxRef.current + 1);
       setCurrentNode(solution.order[idxRef.current]);
       const x = solution?.order[idxRef.current];
-      if (x) addVisited(x);
+      if(x) addVisited(x);
     }
   }, [addVisited, solution]);
+
+  const goToOptimal = useCallback(() => {
+
+    if(solution) {
+      const optIdx = solution.order.findIndex((x) => x.value?.solution === solution.glpkRes);
+      if(optIdx) {
+        idxRef.current = optIdx;
+        setCurrentNode(solution.order[optIdx]);
+        setVisited(solution.order.slice(0, optIdx + 1).reduce((acc, x) => ({ ...acc, [x.value.lp.name]: true }), {}));
+      }
+    }
+  }, [solution, root]);
 
   return (
     <PlaygroundContext.Provider
@@ -84,6 +98,7 @@ export const PlaygroundProvider: React.FC = ({ children }) => {
         removeVisited,
         selectNode: setSelectedNode,
         selectedNode,
+        goToOptimal
       }}
     >
       {children}

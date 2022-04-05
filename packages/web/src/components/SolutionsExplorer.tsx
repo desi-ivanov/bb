@@ -8,6 +8,7 @@ export const SolutionsExplorer: React.FC = () => {
   const currentNode = useCurrentNode();
   const prevNode = useContextSelector(PlaygroundContext, (x) => x.prevNode);
   const nextNode = useContextSelector(PlaygroundContext, (x) => x.nextNode);
+  const goToOptimal = useContextSelector(PlaygroundContext, (x) => x.goToOptimal);
   return (
     currentNode && (
       <Stack spacing={1}>
@@ -15,6 +16,7 @@ export const SolutionsExplorer: React.FC = () => {
         <Stack style={{ flexDirection: "row" }} spacing={1}>
           <button onClick={prevNode}>Prev node</button>
           <button onClick={nextNode}>Next node</button>
+          <button onClick={goToOptimal}>Go to optimal</button>
         </Stack>
         <NodeInfo node={currentNode} />
       </Stack>

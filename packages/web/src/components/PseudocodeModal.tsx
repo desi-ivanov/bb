@@ -40,6 +40,13 @@ export const PseudocodeModal: React.VFC<{ onClose: () => void }> = ({ onClose })
     let sol = await GLPK.solve(node);
     node.solution = sol;
 
+    // if the solution is unbounded, stop the search
+    if (sol.result.status === GLP_UNBND) {
+      node.label = "unbounded";
+      bestIntSol = sol; 
+      return  { bestIntSol, root };
+    }
+
     // if there is no solution, mark the node as closed and continue
     if(sol.status === GLPK.GLP_UNDEF) 
       node.label = "no-solution"
@@ -81,7 +88,7 @@ export const PseudocodeModal: React.VFC<{ onClose: () => void }> = ({ onClose })
       }
     }
   }
-  return { best, root };
+  return { bestIntSol, root };
 }
 `}
       </SyntaxHighlighter>

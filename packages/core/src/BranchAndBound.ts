@@ -13,7 +13,7 @@ export type BBNode = Node<{
   lp: LP;
   solution?: Result;
   label?: string;
-  status?: "z-solution" | "r-solution" | "bound" | "unfeasible" | "no-solution";
+  status?: "z-solution" | "r-solution" | "bound" | "no-solution" | "unbounded";
   zStarSnapshot: Result | null;
 }>;
 export type ExplorationMode = "dfs" | "bfs" | "best-first";
@@ -22,8 +22,8 @@ export type BBInit = {
   constants: {
     GLP_LO: number;
     GLP_UP: number;
-    GLP_INFEAS: number;
     GLP_UNDEF: number;
+    GLP_UNBND: number;
   };
 };
 export type BBSolution = {
@@ -32,7 +32,7 @@ export type BBSolution = {
   order: BBNode[];
 };
 
-export const init = ({ solve, constants: { GLP_LO, GLP_UP, GLP_INFEAS, GLP_UNDEF } }: BBInit) => {
+export const init = ({ solve, constants: { GLP_LO, GLP_UP, GLP_UNBND, GLP_UNDEF } }: BBInit) => {
   const Branch = (mainNode: BBNode, leftName: string, rightName: string, [name, value]: [string, number]): [BBNode, BBNode] => {
     const leftVarBound = Math.floor(value);
     const rightVarBound = Math.ceil(value);
@@ -99,10 +99,12 @@ export const init = ({ solve, constants: { GLP_LO, GLP_UP, GLP_INFEAS, GLP_UNDEF
       currentNode.value.solution = sol;
       currentNode.value.zStarSnapshot = zStar;
 
-      if (sol.result.status === GLP_INFEAS) {
-        currentNode.value.status = "unfeasible";
+      if (sol.result.status === GLP_UNBND) {
+        currentNode.value.status = "unbounded";
+        currentNode.value.solution.result.z = Infinity;
         continue;
       }
+
       if (sol.result.status === GLP_UNDEF) {
         currentNode.value.status = "no-solution";
         continue;

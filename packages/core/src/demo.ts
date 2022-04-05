@@ -29,8 +29,8 @@ const { BranchAndBound } = init({
   constants: {
     GLP_LO: glpk.GLP_LO,
     GLP_UP: glpk.GLP_UP,
-    GLP_INFEAS: glpk.GLP_INFEAS,
     GLP_UNDEF: glpk.GLP_UNDEF,
+    GLP_UNBND: glpk.GLP_UNBND,
   },
 });
 
