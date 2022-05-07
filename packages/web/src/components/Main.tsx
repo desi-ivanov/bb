@@ -65,7 +65,7 @@ x4 >= 0`;
 
 export const Main: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
-  const rawProb = useRef(example5);
+  const rawProb = useRef(example2);
   const root = useContextSelector(PlaygroundContext, (x) => x.root);
   const selectedNode = useContextSelector(PlaygroundContext, (x) => x.selectedNode);
   const setSolution = useContextSelector(PlaygroundContext, (x) => x.setSolution);
