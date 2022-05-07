@@ -139,7 +139,7 @@ export const Main: React.FC = () => {
               <div>Computer Science Department</div>
               <div>University of Turin</div>
               <div>2021 Project</div>
-              <div><a href="https://github.com/evolveyourmind">Credits</a> · <a href="https://github.com/evolveyourmind/bb">GitHub</a></div>
+              <div><a href="https://github.com/desi-ivanov">Credits</a> · <a href="https://github.com/desi-ivanov/bb">GitHub</a></div>
             </Stack>
           </Stack>
         </div>
